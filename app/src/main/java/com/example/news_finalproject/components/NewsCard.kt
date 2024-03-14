@@ -47,12 +47,19 @@ fun NewsCard(
                 .fillMaxWidth()
                 .padding(2.dp)
         ) {
+            AsyncImage(
+                model = ImageRequest.Builder(
+                    LocalContext.current
+                ).data("${newsItem.urlToImage}").build(),
+                contentDescription = "${newsItem.title ?: ""}"
+            )
+
             // Another way to write modifer = Modifier is to pass it directly
             Column(Modifier.padding(20.dp)) {
                 newsItem.title?.let {
                     Text(
                         color = Color.Black,
-                        text = it,
+                        text = "${newsItem.title ?: ""}",
                         style = TextStyle(fontSize = 16.sp),
                         maxLines = 1
                     )
@@ -61,7 +68,7 @@ fun NewsCard(
                 newsItem.description?.let {
                     Text(
                         color = Color.Black,
-                        text = "Species: ${newsItem.description ?: ""}",
+                        text = "${newsItem.description ?: ""}",
                         style = TextStyle(fontSize=16.sp),
                         maxLines = 1
                     )
