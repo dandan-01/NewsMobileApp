@@ -21,9 +21,7 @@ class NewsManager(database: AppDatabase) {
 
     // assign news response
     val newsResponse : MutableState<List<Article>>
-        @Composable get() = remember{
-            _newsResponse
-        }
+        get() = _newsResponse
 
     // call a method automatically
     init {
@@ -33,25 +31,41 @@ class NewsManager(database: AppDatabase) {
     private fun getNews(database : AppDatabase) {
         val service = Api.retrofitService.getTopHeadLines(apiKey)
 
+        // Log the complete URL in logcat
+        val BASE_URL = "https://newsapi.org/v2/"
+        val completeUrl = "${BASE_URL}top-headlines?country=us&apiKey=$apiKey"
+        Log.i("URL", completeUrl)
+
         service.enqueue(object : Callback<News>{
             override fun onResponse(
                 call: Call<News>,
                 response: Response<News>
             ){
                 if (response.isSuccessful) {
-                    Log.i("Data", "Data loaded")
-                    _newsResponse.value = response.body()?.articles?: emptyList()
-                    Log.i("DataStream", _newsResponse.toString())
+                    Log.i("NewsManager", "API Response is successful")
 
-                    //GlobalScope
-                    GlobalScope.launch{
-                        saveDataToDatabase(database = database, _newsResponse.value)
+                    val articles = response.body()?.articles
+                    if (articles != null) {
+                        Log.i("NewsManager", "Number of articles received: ${articles.size}")
+                        for (article in articles) {
+                            Log.i("NewsManager", "Article title: ${article.title}")
+                        }
+                        _newsResponse.value = articles
+
+                        //GlobalScope
+                        GlobalScope.launch {
+                            saveDataToDatabase(database, _newsResponse.value)
+                        }
+                    } else {
+                        Log.e("NewsManager", "Response body is null or empty")
                     }
+                } else {
+                    Log.e("NewsManager", "Unsuccessful response: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {
-                Log.d("error", "${t.message}")
+                Log.d("NewsManager", "API call failed: ${t.message}")
             }
         })
     }

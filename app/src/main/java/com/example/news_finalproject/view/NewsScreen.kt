@@ -16,7 +16,8 @@ import com.example.news_finalproject.components.NewsCard
 fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
 
     val news = newsManager.newsResponse.value
-    Log.i("ds", news.toString())
+    Log.i("NewsScreen", "NewsResponse size: ${news.size}")
+    Log.i("NewsScreen", "First article: ${news.firstOrNull()?.title}")
     Text(text="News App screen")
 
     for(article in news) {
@@ -25,9 +26,6 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
 
     //Column
     Column{
-        Row{
-
-        }
         LazyColumn{
             items(news){
                 article -> NewsCard(newsItem= article, navController)

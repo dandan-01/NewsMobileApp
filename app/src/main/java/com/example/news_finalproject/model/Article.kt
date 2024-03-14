@@ -29,5 +29,5 @@ data class Article(
     val url: String,
 
     @Json(name = "urlToImage")
-    val urlToImage: String
+    val urlToImage: String? = null
 )

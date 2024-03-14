@@ -57,6 +57,15 @@ fun NewsCard(
                         maxLines = 1
                     )
                 }
+
+                newsItem.description?.let {
+                    Text(
+                        color = Color.Black,
+                        text = "Species: ${newsItem.description ?: ""}",
+                        style = TextStyle(fontSize=16.sp),
+                        maxLines = 1
+                    )
+                }
             }
         }
     }
