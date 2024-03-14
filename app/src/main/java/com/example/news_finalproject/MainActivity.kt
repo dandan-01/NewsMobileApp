@@ -34,6 +34,8 @@ import com.example.news_finalproject.ui.theme.News_FinalProjectTheme
 import com.example.news_finalproject.view.NewsScreen
 
 sealed class Destination(val route: String){
+
+    // Destination.route.Article
     object Article: Destination("article")
 }
 
@@ -44,8 +46,7 @@ class MainActivity : ComponentActivity() {
             News_FinalProjectTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     //fetch logged in user
                     val userID = intent.getStringExtra("userID")
@@ -67,6 +68,7 @@ class MainActivity : ComponentActivity() {
 
                     // moviescaffold
                     val navController = rememberNavController()
+                    NewsScaffold(navController = navController, newsManager)
                 }
             }
         }
@@ -79,7 +81,7 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager) {
         bottomBar = {
         }
     ) {
-            paddingValues ->
+        paddingValues ->
 
         //NavHost
         NavHost(navController = navController, startDestination = Destination.Article.route){
