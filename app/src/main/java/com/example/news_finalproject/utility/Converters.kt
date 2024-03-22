@@ -8,7 +8,7 @@ import com.squareup.moshi.Types
 class Converters {
     private val moshi: Moshi = Moshi.Builder().build()
 
-    //not sure if I need to change it to list<String>? idk, since I don't have a PK
+    // converts JSON string into a list of integers
     fun fromString(value: String?): List<Int>? {
         if (value == null) return null
 
@@ -18,6 +18,7 @@ class Converters {
         return adapter.fromJson(value)
     }
 
+    // converts list of integers into JSON string
     @TypeConverter
     fun listToString(list: List<Int>?): String? {
         if (list == null) return null

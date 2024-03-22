@@ -31,11 +31,6 @@ class NewsManager(database: AppDatabase) {
     private fun getNews(database : AppDatabase) {
         val service = Api.retrofitService.getTopHeadLines(apiKey)
 
-        // Log the complete URL in logcat
-        val BASE_URL = "https://newsapi.org/v2/"
-        val completeUrl = "${BASE_URL}top-headlines?country=us&apiKey=$apiKey"
-        Log.i("URL", completeUrl)
-
         service.enqueue(object : Callback<News>{
             override fun onResponse(
                 call: Call<News>,

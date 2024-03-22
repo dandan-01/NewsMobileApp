@@ -8,6 +8,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object Api {
     private val BASE_URL = "https://newsapi.org/v2/"
 
+    // parse JSON files for usage in Kotlin & Compose
+
     // create moshi
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())

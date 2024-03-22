@@ -12,6 +12,7 @@ interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllNews(news: List<Article>?)
 
+    // TODO
     // instead of using id = :id, I had to use url because of limited JSON data (PK not available in Article model)
     @Query("SELECT * FROM tbl_news WHERE url = :url")
     fun getNewsById(url: String) : Article
