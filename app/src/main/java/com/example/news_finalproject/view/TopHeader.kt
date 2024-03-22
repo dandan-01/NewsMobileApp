@@ -21,9 +21,9 @@ import com.example.news_finalproject.R
 
 @Composable
 fun TopHeader(navController : NavController) {
-    val icMenu = painterResource(id = R.drawable.ic_menu)
-    val icAccount = painterResource(id = R.drawable.ic_account)
-    val icGuide = painterResource(id = R.drawable.ic_guide)
+    val ic_menu = painterResource(id = R.drawable.ic_menu)
+    val ic_account = painterResource(id = R.drawable.ic_account)
+    val ic_guide = painterResource(id = R.drawable.ic_guide)
 
     Row(
         modifier = Modifier
@@ -34,7 +34,7 @@ fun TopHeader(navController : NavController) {
             onClick = { /* Handle navigation icon click */ },
             modifier = Modifier.size(48.dp) // Set size of the IconButton
         ) {
-            Icon(icMenu, contentDescription = "Menu")
+            Icon(ic_menu, contentDescription = "Menu")
         }
 
         // Spacer
@@ -45,7 +45,7 @@ fun TopHeader(navController : NavController) {
             onClick = { /* Handle account icon click */ },
             modifier = Modifier.size(48.dp) // Set size of the IconButton
         ) {
-            Icon(icAccount, contentDescription = "Account")
+            Icon(ic_account, contentDescription = "Account")
         }
 
         // Spacer
@@ -56,7 +56,7 @@ fun TopHeader(navController : NavController) {
             onClick = { /* Handle guide icon click */ },
             modifier = Modifier.size(48.dp) // Set size of the IconButton
         ) {
-            Icon(icGuide, contentDescription = "Guide")
+            Icon(ic_guide, contentDescription = "Guide")
         }
     }
 }
