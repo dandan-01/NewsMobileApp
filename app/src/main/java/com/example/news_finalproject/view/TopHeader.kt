@@ -114,7 +114,7 @@ fun TopHeader(navController: NavController) {
     var menuVisible by remember { mutableStateOf(false) }
 
     // text field value when a user types in the search bar
-    var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
+    var text by remember { mutableStateOf("") }
 
     // icons
     val ic_menu = painterResource(id = R.drawable.ic_menu)
@@ -144,8 +144,8 @@ fun TopHeader(navController: NavController) {
 
         // Text field for search input
         TextField(
-            value = textFieldValue, // Your TextField value
-            onValueChange = { textFieldValue = it },
+            value = text, // Your TextField value
+            onValueChange = { text = it },
             modifier = Modifier
                 .weight(1f) // Occupy remaining space
                 .height(30.dp) // Adjust the height
@@ -167,7 +167,7 @@ fun TopHeader(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f)) // Semi-transparent black background
+                .background(Color.Black.copy(alpha = 0.6f)) // Semi-transparent black background
                 .clickable(onClick = { menuVisible = false }) // Close menu when clicked outside the overlay
         ) {
             // Frame for the menu
@@ -188,12 +188,12 @@ fun TopHeader(navController: NavController) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .padding(bottom = 30.dp)
+                            .padding(bottom = 40.dp)
                     ) {
-                        Icon(ic_stocks, contentDescription = "CryptoNow Logo", modifier = Modifier.size(50.dp))
+                        Icon(ic_stocks, contentDescription = "CryptoNow Logo", modifier = Modifier.size(40.dp))
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "CryptoNow",
+                            text = "CRYPTO\nSOURCE",
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold
@@ -205,7 +205,7 @@ fun TopHeader(navController: NavController) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(15.dp)
                             .clickable { /* Handle menu item click */ }
                     ) {
                         Icon(ic_account, contentDescription = "Account", modifier = Modifier.size(30.dp))
@@ -224,12 +224,12 @@ fun TopHeader(navController: NavController) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(15.dp)
                             .clickable { /* Handle menu item click */ }
                     ) {
                         Icon(ic_bitcoin, contentDescription = "Bitcoin News", modifier = Modifier.size(30.dp))
                         Text(
-                            text = "Bitcoin",
+                            text = "Bitcoin News",
                             style = TextStyle(
                                 fontSize = 16.sp
                             ),
@@ -243,12 +243,12 @@ fun TopHeader(navController: NavController) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(15.dp)
                             .clickable { /* Handle menu item click */ }
                     ) {
                         Icon(ic_ethereum, contentDescription = "Ethereum News", modifier = Modifier.size(30.dp))
                         Text(
-                            text = "Ethereum",
+                            text = "Ethereum News",
                             style = TextStyle(
                                 fontSize = 16.sp
                             ),
@@ -262,7 +262,7 @@ fun TopHeader(navController: NavController) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(15.dp)
                             .clickable { /* Handle menu item click */ }
                     ) {
                         Icon(ic_guide, contentDescription = "Guide", modifier = Modifier.size(30.dp))

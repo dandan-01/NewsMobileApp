@@ -77,7 +77,7 @@ fun NewsCard(
                 text = newsItem.title ?: "",
                 maxLines = 2,
                 style = TextStyle(
-                    fontSize = 24.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 ),
                 overflow = TextOverflow.Ellipsis
@@ -89,6 +89,9 @@ fun NewsCard(
             Text(
                 text = newsItem.description ?: "",
                 maxLines = 3,
+                style = TextStyle(
+                    fontSize = 16.sp
+                ),
                 overflow = TextOverflow.Ellipsis
             )
         }
