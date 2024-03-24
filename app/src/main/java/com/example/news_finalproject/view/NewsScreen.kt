@@ -3,9 +3,12 @@ package com.example.news_finalproject.view
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Button
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,18 +52,20 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
                 onClick = { /* Navigate to Bitcoin Page */ },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 4.dp)
+                    .padding(end = 4.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
             ) {
-                Icon(ic_bitcoin, contentDescription = "Account")
+                Icon(ic_bitcoin, contentDescription = "Account", modifier = Modifier.size(24.dp))
                 Text("Bitcoin")
             }
             Button(
                 onClick = { /* Navigate to Ethereum Page */ },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 4.dp)
+                    .padding(start = 4.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
             ) {
-                Icon(ic_ethereum, contentDescription = "Account")
+                Icon(ic_ethereum, contentDescription = "Account", modifier = Modifier.size(24.dp))
                 Text("Ethereum")
             }
         }
