@@ -43,6 +43,10 @@ sealed class Destination(val route: String){
 
     // Destination.route.Article
     object Article: Destination("article")
+
+    object Bitcoin: Destination("bitcoin")
+
+    object Ethereum: Destination("ethereum")
 }
 
 class MainActivity : ComponentActivity() {
@@ -96,6 +100,11 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager) {
             NavHost(navController = navController, startDestination = Destination.Article.route) {
                 composable(Destination.Article.route) {
                     NewsScreen(newsManager, navController)
+                }
+
+                composable(Destination.Bitcoin.route)
+                {
+                    BitcoinScreen()
                 }
             }
         }

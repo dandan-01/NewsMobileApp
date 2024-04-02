@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -46,13 +48,15 @@ fun NewsCard(
             .padding(8.dp)
             .clickable { /* Handle click event */ }
             .fillMaxWidth()
-            .border(1.dp, Color.Gray, shape = RectangleShape)
+//            .border(1.dp, Color.Gray, shape = RectangleShape)
     ) {
         // Image
         Box(
             modifier = Modifier
                 .width(120.dp)
                 .height(120.dp)
+                .clip(
+                    RoundedCornerShape(8.dp))
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -77,10 +81,11 @@ fun NewsCard(
                 text = newsItem.title ?: "",
                 maxLines = 2,
                 style = TextStyle(
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(end = 12.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -90,9 +95,10 @@ fun NewsCard(
                 text = newsItem.description ?: "",
                 maxLines = 3,
                 style = TextStyle(
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 ),
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(end = 12.dp)
             )
         }
     }

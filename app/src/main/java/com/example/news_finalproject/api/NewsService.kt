@@ -20,7 +20,6 @@ interface NewsService {
         @Query("apiKey") apiKey: String
     ): Call<News>
 
-    //additional TODO
     // get ethereum news
     @GET("everything?q=ethereum")
     fun searchEthereum (
