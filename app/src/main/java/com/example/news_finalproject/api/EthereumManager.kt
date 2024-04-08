@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsManager(database: AppDatabase) {
+class EthereumManager(database: AppDatabase) {
 
     private var _newsResponse = mutableStateOf<List<Article>>(emptyList())
     val apiKey:String = "069eb3bd53fc43e7b4650993a0859985"
@@ -32,7 +32,7 @@ class NewsManager(database: AppDatabase) {
     private fun getNews(database : AppDatabase) {
 
         // Fetch news based on the specified query
-        val service = Api.retrofitService.getTopHeadLines(apiKey)
+        val service = Api.retrofitService.searchEthereum(apiKey)
 
         service.enqueue(object : Callback<News>{
             override fun onResponse(
@@ -40,13 +40,13 @@ class NewsManager(database: AppDatabase) {
                 response: Response<News>
             ){
                 if (response.isSuccessful) {
-                    Log.i("NewsManager", "API Response is successful")
+                    Log.i("EthereumManager", "API Response is successful")
 
                     val articles = response.body()?.articles
                     if (articles != null) {
-                        Log.i("NewsManager", "Number of articles received: ${articles.size}")
+                        Log.i("EthereumManager", "Number of articles received: ${articles.size}")
                         for (article in articles) {
-                            Log.i("NewsManager", "Article title: ${article.title}")
+                            Log.i("EthereumManager", "Article title: ${article.title}")
                         }
                         _newsResponse.value = articles
 
@@ -55,15 +55,15 @@ class NewsManager(database: AppDatabase) {
                             saveDataToDatabase(database, _newsResponse.value)
                         }
                     } else {
-                        Log.e("NewsManager", "Response body is null or empty")
+                        Log.e("EthereumManager", "Response body is null or empty")
                     }
                 } else {
-                    Log.e("NewsManager", "Unsuccessful response: ${response.code()}")
+                    Log.e("EthereumManager", "Unsuccessful response: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {
-                Log.d("NewsManager", "API call failed: ${t.message}")
+                Log.d("EthereumManager", "API call failed: ${t.message}")
             }
         })
     }

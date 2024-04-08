@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsManager(database: AppDatabase) {
+class BitcoinManager(database: AppDatabase) {
 
     private var _newsResponse = mutableStateOf<List<Article>>(emptyList())
     val apiKey:String = "069eb3bd53fc43e7b4650993a0859985"
@@ -32,7 +32,7 @@ class NewsManager(database: AppDatabase) {
     private fun getNews(database : AppDatabase) {
 
         // Fetch news based on the specified query
-        val service = Api.retrofitService.getTopHeadLines(apiKey)
+        val service = Api.retrofitService.searchBitcoin(apiKey)
 
         service.enqueue(object : Callback<News>{
             override fun onResponse(
@@ -40,13 +40,13 @@ class NewsManager(database: AppDatabase) {
                 response: Response<News>
             ){
                 if (response.isSuccessful) {
-                    Log.i("NewsManager", "API Response is successful")
+                    Log.i("BitcoinManager", "API Response is successful")
 
                     val articles = response.body()?.articles
                     if (articles != null) {
-                        Log.i("NewsManager", "Number of articles received: ${articles.size}")
+                        Log.i("BitcoinManager", "Number of articles received: ${articles.size}")
                         for (article in articles) {
-                            Log.i("NewsManager", "Article title: ${article.title}")
+                            Log.i("BitcoinManager", "Article title: ${article.title}")
                         }
                         _newsResponse.value = articles
 
@@ -55,15 +55,15 @@ class NewsManager(database: AppDatabase) {
                             saveDataToDatabase(database, _newsResponse.value)
                         }
                     } else {
-                        Log.e("NewsManager", "Response body is null or empty")
+                        Log.e("BitcoinManager", "Response body is null or empty")
                     }
                 } else {
-                    Log.e("NewsManager", "Unsuccessful response: ${response.code()}")
+                    Log.e("BitcoinManager", "Unsuccessful response: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {
-                Log.d("NewsManager", "API call failed: ${t.message}")
+                Log.d("BitcoinManager", "API call failed: ${t.message}")
             }
         })
     }

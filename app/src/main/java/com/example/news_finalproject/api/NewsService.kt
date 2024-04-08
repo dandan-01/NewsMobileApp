@@ -27,7 +27,7 @@ interface NewsService {
     ) : Call<News>
 
     // get bitcoin news
-    @GET("everything?q=bitcoin")
+    @GET("everything?q=bitcoin+trending")
     fun searchBitcoin (
         @Query("apiKey") apiKey: String
     ) : Call<News>

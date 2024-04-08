@@ -2,37 +2,24 @@ package com.example.news_finalproject.view
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.hoverable
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,17 +33,16 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.news_finalproject.Destination
 import com.example.news_finalproject.R
+import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
-import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.components.NewsCard
 
 @Composable
-fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
-
+fun EthereumScreen(ethereumManager: EthereumManager, navController: NavHostController) {
     // logs
-    val news = newsManager.newsResponse.value
-    Log.i("NewsScreen", "NewsResponse size: ${news.size}")
-    Log.i("NewsScreen", "First article: ${news.firstOrNull()?.title}")
+    val news = ethereumManager.newsResponse.value
+    Log.i("EthereumScreen", "NewsResponse size: ${news.size}")
+    Log.i("EthereumScreen", "First article: ${news.firstOrNull()?.title}")
 
     for(article in news) {
         Log.i("title", "${article.title}")
@@ -78,7 +64,7 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
                 onClick = { navController.navigate(Destination.Article.route) },
                 modifier = Modifier
                     .padding(0.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFD9DFEC))
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
             ) {
                 androidx.compose.material.Text(
                     text = "Trending Now",
@@ -115,7 +101,7 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
             Button(
                 onClick = { navController.navigate(Destination.Ethereum.route) },
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                colors = ButtonDefaults.buttonColors(Color(0xFFD9DFEC))
             ) {
                 androidx.compose.material.Text(
                     text = "Ethereum",
@@ -130,7 +116,7 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
 
         // Trending News header
         Text(
-            text = "Trending Crypto News",
+            text = "Ethereum News",
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold

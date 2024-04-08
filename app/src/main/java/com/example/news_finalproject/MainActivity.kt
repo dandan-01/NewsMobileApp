@@ -28,6 +28,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.news_finalproject.api.BitcoinManager
+import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.db.AppDatabase
@@ -36,6 +38,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.example.news_finalproject.ui.theme.News_FinalProjectTheme
+import com.example.news_finalproject.view.BitcoinScreen
+import com.example.news_finalproject.view.EthereumScreen
 import com.example.news_finalproject.view.NewsScreen
 import com.example.news_finalproject.view.TopHeader
 
@@ -69,6 +73,8 @@ class MainActivity : ComponentActivity() {
 
                     // fetch news data from api
                     val newsManager: NewsManager = NewsManager(db)
+                    val bitcoinManager: BitcoinManager = BitcoinManager(db)
+                    val ethereumManager: EthereumManager = EthereumManager(db)
 
                     // firestore
                     val fs_db = Firebase.firestore
@@ -78,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
                     // moviescaffold
                     val navController = rememberNavController()
-                    NewsScaffold(navController = navController, newsManager)
+                    NewsScaffold(navController = navController, newsManager, bitcoinManager, ethereumManager)
                 }
             }
         }
@@ -86,7 +92,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NewsScaffold(navController: NavHostController, newsManager: NewsManager) {
+fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bitcoinManager: BitcoinManager, ethereumManager: EthereumManager) {
     Scaffold(
         topBar = {
             TopHeader(navController = navController)
@@ -104,7 +110,12 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager) {
 
                 composable(Destination.Bitcoin.route)
                 {
-                    BitcoinScreen()
+                    BitcoinScreen(bitcoinManager, navController)
+                }
+
+                composable(Destination.Ethereum.route)
+                {
+                    EthereumScreen(ethereumManager, navController)
                 }
             }
         }
