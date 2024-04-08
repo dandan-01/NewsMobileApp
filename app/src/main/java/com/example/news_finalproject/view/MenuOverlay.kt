@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,6 +54,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -60,68 +62,49 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.news_finalproject.Destination
 import com.example.news_finalproject.ui.theme.News_FinalProjectTheme
 import com.example.news_finalproject.components.NavItem
 import kotlinx.coroutines.launch
 
 @Composable
 fun MenuOverlay(navController: NavController) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
-    val coroutineScope = rememberCoroutineScope()
-
-    var selectedItemIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
-
-    val items = listOf(
-        NavItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        NavItem(
-            title = "Account",
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle
-        )
-    )
-
-    ModalNavigationDrawer(
-        drawerContent = {
-            ModalDrawerSheet {
-                Spacer(modifier = Modifier.height(16.dp))
-                items.forEachIndexed { index, item ->
-                    NavigationDrawerItem(
-                        label = {
-                            Text(text = item.title)
-                        },
-                        selected = index == selectedItemIndex,
-                        onClick = {
-                            selectedItemIndex = index
-                            coroutineScope.launch {
-                                drawerState.close()
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    item.selectedIcon
-                                } else item.unselectedIcon,
-                                contentDescription = item.title
-                            )
-                        },
-                        modifier = Modifier
-                            .padding(NavigationDrawerItemDefaults.ItemPadding)
-                            .clickable { // Add clickable modifier
-                                selectedItemIndex = index
-                                coroutineScope.launch {
-                                    drawerState.close()
-                                }
-                            }
-                    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f)) // Semi-transparent black background
+            .clickable { navController.popBackStack() } // Navigate back when clicked outside
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.5f) // Take up 75% of the screen width
+                .padding(16.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Add menu items here
+                MenuItem(text = "Home") {
+                    navController.navigate(Destination.Article.route) {
+                        popUpTo(Destination.Article.route) { inclusive = true }
+                    }
+                }
+                MenuItem(text = "Settings") {
+                    navController.navigate(Destination.Bitcoin.route)
+                }
+                MenuItem(text = "About") {
+                    navController.navigate(Destination.Ethereum.route)
                 }
             }
-        },
-        drawerState = drawerState
-    ) { }
+        }
+    }
+}
+
+@Composable
+fun MenuItem(text: String, onClick: () -> Unit) {
+    Text(
+        text = text,
+        modifier = Modifier.clickable(onClick = onClick),
+        color = Color.White
+    )
 }
