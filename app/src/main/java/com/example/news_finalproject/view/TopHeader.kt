@@ -23,18 +23,33 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.TextField
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,9 +60,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.news_finalproject.Destination
 import com.example.news_finalproject.R
+import com.example.news_finalproject.api.NewsViewModel
+import com.example.news_finalproject.components.NavItem
+import com.example.news_finalproject.db.AppDatabase
+import kotlinx.coroutines.launch
 
 @Composable
-fun TopHeader(navController: NavController) {
+fun TopHeader(navController: NavController, viewModel: NewsViewModel) {
     // Define the state for the menu
     var menuVisible by remember { mutableStateOf(false) }
 
@@ -56,6 +75,9 @@ fun TopHeader(navController: NavController) {
 
     // text field value when a user types in the search bar
     var text by remember { mutableStateOf("") }
+
+    // get db
+    val db = AppDatabase.getInstance(LocalContext.current)
 
     // icons
     val ic_menu = painterResource(id = R.drawable.ic_menu)
@@ -77,7 +99,7 @@ fun TopHeader(navController: NavController) {
         ) {
             // Navigation icon (Menu)
             IconButton(
-                onClick = { menuVisible = !menuVisible },
+                onClick = { },
                 modifier = Modifier.size(48.dp), // Set size of the IconButton
             ) {
                 Icon(ic_menu, contentDescription = "Menu", tint = Color.White)
@@ -138,7 +160,11 @@ fun TopHeader(navController: NavController) {
 
                         // Search icon
                         IconButton(
-                            onClick = { searchVisible = false },
+                            onClick = {
+                                searchVisible = false
+                                viewModel.searchNewsByName(text, db)
+                                navController.navigate(Destination.Search.route)
+                            },
                             modifier = Modifier.padding(horizontal = 8.dp) // Add padding for better visibility
                         ) {
                             Icon(
@@ -146,14 +172,14 @@ fun TopHeader(navController: NavController) {
                                 contentDescription = "Search"
                             )
                         }
+
+                        // Thread/Coroutine
+                        LaunchedEffect(viewModel) {
+                            viewModel.searchNewsByName(text, db)
+                        }
                     }
                 }
             }
-        }
-
-        // Overlay for the menu
-        if (menuVisible) {
-            MenuOverlay(navController = navController)
         }
     }
 }

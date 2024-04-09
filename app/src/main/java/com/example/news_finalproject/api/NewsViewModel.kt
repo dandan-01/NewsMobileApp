@@ -31,7 +31,7 @@ class NewsViewModel : ViewModel() {
     val api_key: String = "069eb3bd53fc43e7b4650993a0859985"
 
     // Search movies
-    fun searchNews(newsName: String, database: AppDatabase) {
+    fun searchNewsByName(newsName: String, database: AppDatabase) {
         if (newsName.isNotBlank()) {
             val service = Api.retrofitService.searchNewsByName(api_key, newsName)
 

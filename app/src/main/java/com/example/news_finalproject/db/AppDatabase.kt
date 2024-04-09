@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.news_finalproject.model.Article
 import com.example.news_finalproject.utility.Converters
 
-@Database(entities=[Article::class], version=2, exportSchema=false)
+@Database(entities=[Article::class], version=3, exportSchema=false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     //reference DAO
@@ -26,7 +26,7 @@ abstract class AppDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "NewsApi.org Database").addMigrations(MIGRATION_2_3)
+                    "NewsApi.org Database").addMigrations(MIGRATION_3_4)
                     .fallbackToDestructiveMigration()
                     .build()
 
@@ -34,7 +34,7 @@ abstract class AppDatabase: RoomDatabase() {
                 instance
             }
         }
-        val MIGRATION_2_3 = object : Migration(2, 3) {
+        val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Drop existing tbl_news table if it exists
                 database.execSQL("DROP TABLE IF EXISTS tbl_news")
