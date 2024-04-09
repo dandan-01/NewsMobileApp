@@ -1,5 +1,7 @@
 package com.example.news_finalproject.view
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.runtime.*
 import android.view.MenuItem
 import androidx.compose.foundation.text.BasicTextField
@@ -29,9 +31,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
@@ -72,6 +76,8 @@ import com.example.news_finalproject.R
 import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.components.NavItem
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.news_finalproject.components.NewsCard
 import com.example.news_finalproject.db.AppDatabase
@@ -110,13 +116,17 @@ fun TopHeader(navController: NavController) {
     val ic_search = painterResource(id = R.drawable.ic_search)
     val ic_bitcoin = painterResource(id = R.drawable.ic_bitcoin)
     val ic_ethereum = painterResource(id = R.drawable.ic_ethereum)
-    val ic_stocks = painterResource(id = R.drawable.ic_stocks)
 
     // menu drawerState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     // coroutine for menu overlay
     val coroutineScope = rememberCoroutineScope()
+
+    //
+    var selectedItemIndex by rememberSaveable {
+        mutableStateOf(0)
+    }
 
     //Column
     Column(
@@ -238,12 +248,60 @@ fun TopHeader(navController: NavController) {
             }
         }
 
+        // menu items
+        val items = listOf(
+            NavItem(
+                title = "Home",
+                icon = Icons.Filled.Home
+            ),
+            NavItem(
+                title = "Account",
+                icon = Icons.Filled.AccountCircle
+            ),
+            NavItem(
+                title = "Guide to Safe Investing",
+                icon = Icons.Filled.Info,
+            ),
+            NavItem(
+                title = "Settings",
+                icon = Icons.Filled.Settings
+            )
+        )
+
         // menu overlay
         if (menuVisible) {
             ModalNavigationDrawer(
                 drawerContent = {
                     ModalDrawerSheet {
-                        Text( text = "Home")
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        items.forEachIndexed { index, item ->
+                            NavigationDrawerItem(
+                                label = {
+                                    Text(text = item.title)
+                                },
+                                selected = index == selectedItemIndex,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        drawerState.close()
+                                    }
+                                },
+                                icon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = item.icon,
+                                        contentDescription = item.title
+                                    )
+                                },
+                                modifier = Modifier
+                                    .padding(NavigationDrawerItemDefaults.ItemPadding)
+                                    .clickable { // Add clickable modifier
+                                        selectedItemIndex = index
+                                        coroutineScope.launch {
+                                            drawerState.close()
+                                        }
+                                    }
+                            )
+                        }
                     }
                 },
                 drawerState = drawerState
