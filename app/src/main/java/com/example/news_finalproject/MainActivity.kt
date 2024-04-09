@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
 fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bitcoinManager: BitcoinManager, ethereumManager: EthereumManager, viewModel : NewsViewModel) {
     Scaffold(
         topBar = {
-            TopHeader(navController = navController, viewModel)
+            TopHeader(navController = navController)
         }
     ) { paddingValues ->
         Column(
@@ -144,7 +144,7 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
                 }
 
                 composable(Destination.Search.route) {
-                    SearchScreen(navController, viewModel)
+                    SearchScreen(navController)
                 }
             }
         }

@@ -5,7 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.news_finalproject.Destination
 import com.example.news_finalproject.db.AppDatabase
 import com.example.news_finalproject.model.Article
 import com.example.news_finalproject.model.News
@@ -19,19 +22,18 @@ import retrofit2.Response
 
 class NewsViewModel : ViewModel() {
     // MutableState for holding current state of news
-    private val news = mutableStateOf<List<Article>>(emptyList())
+    val news = mutableStateOf<List<Article>>(emptyList())
 
-    // MutableStateFlow for exposing news state as a flow
-    private val _newsStateFlow = MutableStateFlow(news.value)
-
-    // Expose news state as StateFlow
-    val newsStateFlow: StateFlow<List<Article>> = _newsStateFlow
+    val newsResponse: MutableState<List<Article>> // state allows us to make data available within app
+        @Composable get() = remember{
+            news
+        }
 
     // api key
     val api_key: String = "069eb3bd53fc43e7b4650993a0859985"
 
     // Search movies
-    fun searchNewsByName(newsName: String, database: AppDatabase) {
+    fun searchNewsByName(newsName: String) {
         if (newsName.isNotBlank()) {
             val service = Api.retrofitService.searchNewsByName(api_key, newsName)
 
@@ -40,14 +42,14 @@ class NewsViewModel : ViewModel() {
                     call: Call<News>,
                     response: Response<News>) {
                     if (response.isSuccessful) {
-                        Log.i("DS", "testing testing")
+                        Log.i("NewsViewModel", "response successful")
                         news.value = response.body()?.articles?:emptyList()
-                        Log.i("Article found", news.toString())
+                        Log.i("NewsViewModel", news.toString())
 
                         // GlobalScope
-                        GlobalScope.launch {
-                            database.newsDao().insertAllNews(news = news.value)
-                        }
+//                        GlobalScope.launch {
+//                            database.newsDao().insertAllNews(news = news.value)
+
                     }
                 }
 

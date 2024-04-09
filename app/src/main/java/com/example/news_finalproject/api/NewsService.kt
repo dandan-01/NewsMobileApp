@@ -9,10 +9,6 @@ import retrofit2.http.Query
 interface NewsService {
 
     // always call parent News data and NOT Article
-//    @GET("top-headlines?country=us")
-//    fun getTopHeadLines(
-//        @Query("apiKey") apiKey: String
-//    ): Call<News>
 
     // get crypto news
     @GET("everything?q=cryptocurrency")
@@ -33,10 +29,9 @@ interface NewsService {
     ) : Call<News>
 
     // search bar
-    @GET("everything?")
+    @GET("everything")
     fun searchNewsByName (
         @Query("apiKey") apiKey: String,
-        @Query("q") query: String,
-        @Query("qInTitle") qInTitle: String = "cryptocurrency" // Specify keyword related to cryptocurrency
+        @Query("q") query: String
     ) : Call<News>
 }

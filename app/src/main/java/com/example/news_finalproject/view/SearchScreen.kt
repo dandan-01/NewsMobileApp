@@ -28,6 +28,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -50,12 +52,14 @@ import com.example.news_finalproject.R
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.components.NewsCard
+import com.example.news_finalproject.model.Article
 
 @Composable
-fun SearchScreen(navController: NavController, viewModel: NewsViewModel) {
+fun SearchScreen(navController: NavController) {
 
+    val viewModel: NewsViewModel = viewModel()
+    val news: List<Article> = viewModel.news.value
     // logs
-    val news = viewModel.newsStateFlow.value
     Log.i("SearchScreen", "NewsResponse size: ${news.size}")
     Log.i("SearchScreen", "First article: ${news.firstOrNull()?.title}")
 
@@ -79,10 +83,10 @@ fun SearchScreen(navController: NavController, viewModel: NewsViewModel) {
                 onClick = { navController.navigate(Destination.Article.route) },
                 modifier = Modifier
                     .padding(0.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFD9DFEC))
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
             ) {
                 androidx.compose.material.Text(
-                    text = "Search results",
+                    text = "Trending News",
                     maxLines = 1,
                     color = Color(0xFF3D568E),
                     style = TextStyle(

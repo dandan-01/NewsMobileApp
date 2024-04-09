@@ -19,6 +19,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -41,6 +45,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -48,11 +53,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -62,11 +70,16 @@ import com.example.news_finalproject.Destination
 import com.example.news_finalproject.R
 import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.components.NavItem
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.news_finalproject.components.NewsCard
 import com.example.news_finalproject.db.AppDatabase
+import com.example.news_finalproject.model.Article
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun TopHeader(navController: NavController, viewModel: NewsViewModel) {
+fun TopHeader(navController: NavController) {
     // Define the state for the menu
     var menuVisible by remember { mutableStateOf(false) }
 
@@ -77,7 +90,17 @@ fun TopHeader(navController: NavController, viewModel: NewsViewModel) {
     var text by remember { mutableStateOf("") }
 
     // get db
-    val db = AppDatabase.getInstance(LocalContext.current)
+//    val db = AppDatabase.getInstance(LocalContext.current)
+    val context = LocalContext.current
+
+    // keyboard controller
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // viewModel
+    val viewModel: NewsViewModel = viewModel()
+
+    //get searched articles
+    val news: List<Article> = viewModel.news.value
 
     // icons
     val ic_menu = painterResource(id = R.drawable.ic_menu)
@@ -146,52 +169,55 @@ fun TopHeader(navController: NavController, viewModel: NewsViewModel) {
                         .padding(horizontal = 16.dp) // Add horizontal padding for better visibility
                 ) {
                     // Row to hold the text field and search icon
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    Column (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     ) {
-                        // Text field for search input
-                        BasicTextField(
-                            value = text,
+                        OutlinedTextField(
+                            value =  text,
                             onValueChange = { text = it },
+                            label = {Text("Search")},
+                            keyboardOptions = KeyboardOptions(imeAction= ImeAction.Search),
+                            keyboardActions = KeyboardActions(onSearch = {
+                                // add view model in a bit
+                                viewModel.searchNewsByName(text)
+                                keyboardController?.hide()
+                            }),
                             modifier = Modifier
-                                .weight(1f) // Take up remaining space
-                                .padding(vertical = 8.dp) // Add vertical padding
+                                .fillMaxWidth()
                         )
 
-                        // Search icon
-                        IconButton(
-                            onClick = {
+                        // add space
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Button(
+                            onClick ={
+                                // view model to go next
+                                //navController.navigate(Destination.Search.route) put this in NewsViewModel instead
                                 searchVisible = false
-                                viewModel.searchNewsByName(text, db)
+                                viewModel.searchNewsByName(text)
+                            }
+                        ){
+                            Text(
+                                "Submit",
+                                color = Color.White)
+                        }
+                        // thread aka coroutine in android
+                        LaunchedEffect(news) {
+                            if (news.isNotEmpty()) {
                                 navController.navigate(Destination.Search.route)
-                            },
-                            modifier = Modifier.padding(horizontal = 8.dp) // Add padding for better visibility
-                        ) {
-                            Icon(
-                                ic_search,
-                                contentDescription = "Search"
-                            )
+                            }
                         }
 
-                        // Thread/Coroutine
-                        LaunchedEffect(viewModel) {
-                            viewModel.searchNewsByName(text, db)
+                        LazyColumn{
+                            items(news){ article ->
+                                NewsCard(newsItem = article, navController)
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
-
-// create divider for menu
-@Composable
-fun HorizontalDivider() {
-    Divider(
-        color = Color.LightGray,
-        thickness = 1.dp,
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .fillMaxWidth(0.8f) // Take up 80% of the width of the overlay
-    )
 }
