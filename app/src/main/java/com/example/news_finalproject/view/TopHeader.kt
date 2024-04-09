@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.ModalDrawer
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -111,6 +112,12 @@ fun TopHeader(navController: NavController) {
     val ic_ethereum = painterResource(id = R.drawable.ic_ethereum)
     val ic_stocks = painterResource(id = R.drawable.ic_stocks)
 
+    // menu drawerState
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    // coroutine for menu overlay
+    val coroutineScope = rememberCoroutineScope()
+
     //Column
     Column(
     ) {
@@ -122,7 +129,18 @@ fun TopHeader(navController: NavController) {
         ) {
             // Navigation icon (Menu)
             IconButton(
-                onClick = { },
+                onClick = {
+                    menuVisible = !menuVisible
+                    if (menuVisible) {
+                        coroutineScope.launch {
+                            drawerState.open()
+                        }
+                    } else {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    }
+                },
                 modifier = Modifier.size(48.dp), // Set size of the IconButton
             ) {
                 Icon(ic_menu, contentDescription = "Menu", tint = Color.White)
@@ -218,6 +236,18 @@ fun TopHeader(navController: NavController) {
                     }
                 }
             }
+        }
+
+        // menu overlay
+        if (menuVisible) {
+            ModalNavigationDrawer(
+                drawerContent = {
+                    ModalDrawerSheet {
+                        Text( text = "Home")
+                    }
+                },
+                drawerState = drawerState
+            ) {}
         }
     }
 }
