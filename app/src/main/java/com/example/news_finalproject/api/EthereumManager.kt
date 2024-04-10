@@ -17,7 +17,8 @@ import retrofit2.Response
 class EthereumManager(database: AppDatabase) {
 
     private var _newsResponse = mutableStateOf<List<Article>>(emptyList())
-    val apiKey:String = "069eb3bd53fc43e7b4650993a0859985"
+    //    val apiKey:String = "069eb3bd53fc43e7b4650993a0859985"
+    val apiKey:String = ""
 
     // assign news response
     val newsResponse : MutableState<List<Article>>

@@ -2,6 +2,7 @@ package com.example.news_finalproject.view
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.runtime.*
 import android.view.MenuItem
 import androidx.compose.foundation.text.BasicTextField
@@ -109,6 +110,9 @@ fun TopHeader(navController: NavController) {
     //get searched articles
     val news: List<Article> = viewModel.news.value
 
+    // log
+    Log.d("TopHeader", "Number of articles in TopHeader: ${news.size}")
+
     // icons
     val ic_menu = painterResource(id = R.drawable.ic_menu)
     val ic_account = painterResource(id = R.drawable.ic_account)
@@ -123,7 +127,7 @@ fun TopHeader(navController: NavController) {
     // coroutine for menu overlay
     val coroutineScope = rememberCoroutineScope()
 
-    //
+    // selected item index
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
     }
@@ -222,8 +226,7 @@ fun TopHeader(navController: NavController) {
                         Button(
                             onClick ={
                                 // view model to go next
-                                //navController.navigate(Destination.Search.route) put this in NewsViewModel instead
-                                searchVisible = false
+                                // you DO NOT need to redirect to Destination.Search.route!!
                                 viewModel.searchNewsByName(text)
                             }
                         ){
@@ -231,16 +234,16 @@ fun TopHeader(navController: NavController) {
                                 "Submit",
                                 color = Color.White)
                         }
+
                         // thread aka coroutine in android
-                        LaunchedEffect(news) {
-                            if (news.isNotEmpty()) {
-                                navController.navigate(Destination.Search.route)
-                            }
+                        LaunchedEffect(viewModel) {
+                            // you DO NOT need to redirect to Destination.Search.route!!
+                            viewModel.searchNewsByName(text)
                         }
 
                         LazyColumn{
                             items(news){ article ->
-                                NewsCard(newsItem = article, navController)
+                                NewsCard(newsItem = article, navController = navController)
                             }
                         }
                     }

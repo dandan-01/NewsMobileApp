@@ -143,8 +143,9 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
                     //EthereumScreen(ethereumManager, navController)
                 }
 
+                // TODO, to be honest, I don't I even need this route anymore. It's already being handled by my viewModel + TopHeader: LaunchedEffect. Will delete this once confirmed that it's no longer needed
                 composable(Destination.Search.route) {
-                    SearchScreen(navController)
+                    //SearchScreen(navController)
                 }
             }
         }
