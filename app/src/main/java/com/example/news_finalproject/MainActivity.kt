@@ -135,12 +135,12 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
 
                 composable(Destination.Bitcoin.route)
                 {
-                    BitcoinScreen(bitcoinManager, navController)
+                    //BitcoinScreen(bitcoinManager, navController)
                 }
 
                 composable(Destination.Ethereum.route)
                 {
-                    EthereumScreen(ethereumManager, navController)
+                    //EthereumScreen(ethereumManager, navController)
                 }
 
                 composable(Destination.Search.route) {
