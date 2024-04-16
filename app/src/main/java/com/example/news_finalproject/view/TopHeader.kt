@@ -140,15 +140,6 @@ fun TopHeader(navController: NavController) {
             IconButton(
                 onClick = {
                     menuVisible = !menuVisible
-                    if (menuVisible) {
-                        coroutineScope.launch {
-                            drawerState.open()
-                        }
-                    } else {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                    }
                 },
                 modifier = Modifier.size(48.dp), // Set size of the IconButton
             ) {
@@ -246,11 +237,12 @@ fun TopHeader(navController: NavController) {
             }
         }
 
-        // menu items
-        SideMenu(
-            navController = navController,
-            menuVisible = menuVisible,
-            toggleMenu = { menuVisible = !menuVisible }
-        )
+        if (menuVisible) {
+            SideMenu(
+                navController = navController,
+                menuVisible = menuVisible,
+                toggleMenu = { menuVisible = !menuVisible }
+            )
+        }
     }
 }
