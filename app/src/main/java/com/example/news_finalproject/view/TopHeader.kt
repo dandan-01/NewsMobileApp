@@ -127,11 +127,6 @@ fun TopHeader(navController: NavController) {
     // coroutine for menu overlay
     val coroutineScope = rememberCoroutineScope()
 
-    // selected item index
-    var selectedItemIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
-
     //Column
     Column(
     ) {
@@ -252,63 +247,10 @@ fun TopHeader(navController: NavController) {
         }
 
         // menu items
-        val items = listOf(
-            NavItem(
-                title = "Home",
-                icon = Icons.Filled.Home
-            ),
-            NavItem(
-                title = "Account",
-                icon = Icons.Filled.AccountCircle
-            ),
-            NavItem(
-                title = "Guide to Safe Investing",
-                icon = Icons.Filled.Info,
-            ),
-            NavItem(
-                title = "Settings",
-                icon = Icons.Filled.Settings
-            )
+        SideMenu(
+            navController = navController,
+            menuVisible = menuVisible,
+            toggleMenu = { menuVisible = !menuVisible }
         )
-
-        // menu overlay
-        if (menuVisible) {
-            ModalNavigationDrawer(
-                drawerContent = {
-                    ModalDrawerSheet {
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        items.forEachIndexed { index, item ->
-                            NavigationDrawerItem(
-                                label = {
-                                    Text(text = item.title)
-                                },
-                                selected = index == selectedItemIndex,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        drawerState.close()
-                                    }
-                                },
-                                icon = {
-                                    androidx.compose.material3.Icon(
-                                        imageVector = item.icon,
-                                        contentDescription = item.title
-                                    )
-                                },
-                                modifier = Modifier
-                                    .padding(NavigationDrawerItemDefaults.ItemPadding)
-                                    .clickable { // Add clickable modifier
-                                        selectedItemIndex = index
-                                        coroutineScope.launch {
-                                            drawerState.close()
-                                        }
-                                    }
-                            )
-                        }
-                    }
-                },
-                drawerState = drawerState
-            ) {}
-        }
     }
 }

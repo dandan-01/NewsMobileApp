@@ -61,7 +61,6 @@ import com.example.news_finalproject.ui.theme.News_FinalProjectTheme
 import com.example.news_finalproject.view.BitcoinScreen
 import com.example.news_finalproject.view.EthereumScreen
 import com.example.news_finalproject.view.NewsScreen
-import com.example.news_finalproject.view.SearchScreen
 import com.example.news_finalproject.view.TopHeader
 import kotlinx.coroutines.launch
 
@@ -145,7 +144,6 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
 
                 // TODO, to be honest, I don't I even need this route anymore. It's already being handled by my viewModel + TopHeader: LaunchedEffect. Will delete this once confirmed that it's no longer needed
                 composable(Destination.Search.route) {
-                    //SearchScreen(navController)
                 }
             }
         }
