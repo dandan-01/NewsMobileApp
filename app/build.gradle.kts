@@ -11,7 +11,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.news_finalproject"
+        applicationId = "com.example.news_finalproject" //application name in firebase
         minSdk = 24
         targetSdk = 34
         versionCode = 1

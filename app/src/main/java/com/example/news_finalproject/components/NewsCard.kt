@@ -46,7 +46,10 @@ fun NewsCard(
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .clickable { /* Handle click event */ }
+            .clickable {
+                // add the ability to go to detail page
+                navController.navigate("movieDetail/${newsItem.url}")
+            }
             .fillMaxWidth()
 //            .border(1.dp, Color.Gray, shape = RectangleShape)
     ) {
