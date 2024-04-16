@@ -56,6 +56,8 @@ dependencies {
 
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     val nav_version = "2.5.2"
@@ -91,7 +93,7 @@ dependencies {
     // firebase firestore
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     // firebase authentication
-    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
 
     // glide
     //implementation("com.github.bumptech.glide:glide:4.16.0")

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">News_FinalProject</string>
+    <string name="title_activity_sign_in">SignIn</string>
 </resources>
