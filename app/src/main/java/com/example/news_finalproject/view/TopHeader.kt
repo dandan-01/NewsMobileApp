@@ -85,6 +85,7 @@ import com.example.news_finalproject.db.AppDatabase
 import com.example.news_finalproject.model.Article
 import kotlinx.coroutines.launch
 
+// Represents the Top Header of the application. It initiates the menu on-click, and search function
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TopHeader(navController: NavController) {
@@ -97,8 +98,7 @@ fun TopHeader(navController: NavController) {
     // text field value when a user types in the search bar
     var text by remember { mutableStateOf("") }
 
-    // get db
-//    val db = AppDatabase.getInstance(LocalContext.current)
+    // get context
     val context = LocalContext.current
 
     // keyboard controller
@@ -113,14 +113,6 @@ fun TopHeader(navController: NavController) {
     // log
     Log.d("TopHeader", "Number of articles in TopHeader: ${news.size}")
 
-    // icons
-    val ic_menu = painterResource(id = R.drawable.ic_menu)
-    val ic_account = painterResource(id = R.drawable.ic_account)
-    val ic_guide = painterResource(id = R.drawable.ic_guide)
-    val ic_search = painterResource(id = R.drawable.ic_search)
-    val ic_bitcoin = painterResource(id = R.drawable.ic_bitcoin)
-    val ic_ethereum = painterResource(id = R.drawable.ic_ethereum)
-
     // menu drawerState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -132,14 +124,14 @@ fun TopHeader(navController: NavController) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth() // Occupy maximum width
+                .fillMaxWidth()
                 .background(Color(0xFF3D568E)), // Set light blue background color
-            verticalAlignment = Alignment.CenterVertically // Align children vertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Navigation icon (Menu)
             IconButton(
                 onClick = {
-                    menuVisible = !menuVisible
+                    menuVisible = !menuVisible // menu visibility is directly related to menu toggle on/off
                 },
                 modifier = Modifier.size(48.dp), // Set size of the IconButton
             ) {
@@ -171,7 +163,7 @@ fun TopHeader(navController: NavController) {
             }
         }
 
-        // Overlay for the search
+        // Overlay for the search function
         if (searchVisible) {
             Box(
                 modifier = Modifier
@@ -227,6 +219,9 @@ fun TopHeader(navController: NavController) {
                             viewModel.searchNewsByName(text)
                         }
 
+                        // list all article rows
+                        // the items function iterates over each article in the news array
+                        // for each article, create a new NewsCard, add the navController to allow navigation to individual news articles
                         LazyColumn{
                             items(news){ article ->
                                 NewsCard(newsItem = article, navController = navController)
@@ -237,7 +232,9 @@ fun TopHeader(navController: NavController) {
             }
         }
 
+        // initializes menu on-click event
         if (menuVisible) {
+            // open up SideMenu function
             SideMenu(
                 navController = navController,
                 menuVisible = menuVisible,

@@ -50,22 +50,19 @@ import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.components.NewsCard
 
+// When a user clicks on "Trending Now" they are redirected to this screen. This screen also represents the HOME screen
 @Composable
 fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
+    // get all Trending Crypto news articles using news manager
+    val news = newsManager.newsResponse.value
 
     // logs
-    val news = newsManager.newsResponse.value
     Log.i("NewsScreen", "NewsResponse size: ${news.size}")
     Log.i("NewsScreen", "First article: ${news.firstOrNull()?.title}")
 
     for(article in news) {
         Log.i("title", "${article.title}")
     }
-
-    // icons
-    val ic_bitcoin = painterResource(id = R.drawable.ic_bitcoin)
-    val ic_ethereum = painterResource(id = R.drawable.ic_ethereum)
-    val ic_stocks = painterResource(id = R.drawable.ic_stocks)
 
     //Column
     Column(modifier = Modifier
@@ -138,6 +135,7 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
         )
 
+        // column that holds all news articles
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             // Row for the last article image and title
             item {
@@ -180,6 +178,8 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
             }
 
             // list all article rows
+            // the items function iterates over each article in the news array
+            // for each article, create a new NewsCard, add the navController to allow navigation to individual news articles
             items(news) { article ->
                 NewsCard(newsItem = article, navController)
             }

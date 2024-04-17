@@ -37,21 +37,19 @@ import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.components.NewsCard
 
+// When a user clicks on "Ethereum" they are redirected to this screen
 @Composable
 fun EthereumScreen(ethereumManager: EthereumManager, navController: NavHostController) {
-    // logs
+    // get all Ethereum articles using ethereum manager
     val news = ethereumManager.newsResponse.value
+
+    // logs
     Log.i("EthereumScreen", "NewsResponse size: ${news.size}")
     Log.i("EthereumScreen", "First article: ${news.firstOrNull()?.title}")
 
     for(article in news) {
         Log.i("title", "${article.title}")
     }
-
-    // icons
-    val ic_bitcoin = painterResource(id = R.drawable.ic_bitcoin)
-    val ic_ethereum = painterResource(id = R.drawable.ic_ethereum)
-    val ic_stocks = painterResource(id = R.drawable.ic_stocks)
 
     //Column
     Column(modifier = Modifier
@@ -124,6 +122,7 @@ fun EthereumScreen(ethereumManager: EthereumManager, navController: NavHostContr
             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
         )
 
+        // column that holds all news articles
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             // Row for the last article image and title
             item {
@@ -166,6 +165,8 @@ fun EthereumScreen(ethereumManager: EthereumManager, navController: NavHostContr
             }
 
             // list all article rows
+            // the items function iterates over each article in the news array
+            // for each article, create a new NewsCard, add the navController to allow navigation to individual news articles
             items(news) { article ->
                 NewsCard(newsItem = article, navController)
             }

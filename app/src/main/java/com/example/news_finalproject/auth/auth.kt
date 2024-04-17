@@ -41,10 +41,16 @@ import com.example.news_finalproject.Destination
 import com.example.news_finalproject.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
+// Represents the Account screen when the user selects "Account" in the menu
 @Composable
 fun AccountScreen(navController: NavController) {
+    // get instance of firebase authenctication
     val auth = FirebaseAuth.getInstance()
+
+    // if the user is logged in, grab the current user information
     val currentUser = auth.currentUser
+
+    // grabs the current context
     val context = LocalContext.current
 
     if (currentUser != null) {
@@ -56,6 +62,7 @@ fun AccountScreen(navController: NavController) {
     }
 }
 
+// If a user is currently logged in, display a message that the user is currently logged in and add a button that will allow them to log out
 @Composable
 fun LoggedInScreen(email: String, auth: FirebaseAuth, navController: NavController) {
     // If the user is logged in, display logged-in information
@@ -84,6 +91,7 @@ fun LoggedInScreen(email: String, auth: FirebaseAuth, navController: NavControll
     }
 }
 
+// If a user is not logged in, they should be taken to the SignInScreen with a email and password text field that will allow them to sign in with proper credentials
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInScreen(navController: NavController) {
@@ -161,6 +169,8 @@ fun SignInScreen(navController: NavController) {
         }
     }
 }
+
+// Handles the SignIn event using built in Firebase method, signInWithEmailAndPassword()
 @OptIn(ExperimentalComposeUiApi::class)
 private fun performSignIn(
     email: String,

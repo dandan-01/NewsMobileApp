@@ -31,24 +31,25 @@ import com.example.news_finalproject.Destination
 import com.example.news_finalproject.components.NavItem
 import kotlinx.coroutines.launch
 
+// This function handles the menu click event. It opens up a Left-hand side panel with predefined items
 @Composable
 fun SideMenu(
     navController: NavController,
-    menuVisible: Boolean,
-    toggleMenu: () -> Unit
+    menuVisible: Boolean, // indicates if side menu is visible
+    toggleMenu: () -> Unit // used to toggle visibility of side menu (this is handled within TopHeader as well)
 ) {
-    // menu drawerState
+    // menu drawerState, manages the closing and opening of the drawer
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
 
-    // coroutine for menu overlay
+    // coroutine for menu overlay (asynchronous operations)
     val coroutineScope = rememberCoroutineScope()
 
-    // selected item index
+    // keeps track of the selected item within the index
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
     }
 
-    // menu items
+    // define list of menu items
     val items = listOf(
         NavItem(
             title = "Home",
@@ -64,32 +65,32 @@ fun SideMenu(
             title = "Guide to Safe Investing",
             icon = Icons.Filled.Info,
             destination = Destination.Article.route
-        ),
-        NavItem(
-            title = "Settings",
-            icon = Icons.Filled.Settings,
-            destination = Destination.Article.route
         )
     )
 
-    // menu overlay
+    // if menu is visible (or toggled on) then open up a ModalNavigationDrawer
     if (menuVisible) {
+        // handles the opening and closing of the drawer
         ModalNavigationDrawer(
             drawerContent = {
+
+                // represents actual menu content
                 ModalDrawerSheet {
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    // iterates through the list of menu items
                     items.forEachIndexed { index, item ->
                         NavigationDrawerItem(
                             label = {
                                 Text(text = item.title)
                             },
+                            // whether the current item is selected or not
                             selected = index == selectedItemIndex,
                             onClick = {
-                                navController.navigate(item.destination)
-                                selectedItemIndex = index
-                                coroutineScope.launch { drawerState.close() }
-                                toggleMenu()
+                                navController.navigate(item.destination) //navigates to the destination route
+                                selectedItemIndex = index // updates selected item index
+                                coroutineScope.launch { drawerState.close() } // close drawer
+                                toggleMenu() // toggles menu visibility
                             },
                             icon = {
                                 Icon(

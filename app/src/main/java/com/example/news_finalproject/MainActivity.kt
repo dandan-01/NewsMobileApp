@@ -67,9 +67,10 @@ import com.example.news_finalproject.view.NewsScreen
 import com.example.news_finalproject.view.TopHeader
 import kotlinx.coroutines.launch
 
+// Represents different destinations and routes. The sealed modifier, means all subclasses must be declared in the same file as the sealed class itself. This makes it easier to manage and understand all possible destinations in one place.
 sealed class Destination(val route: String){
 
-    // Destination.route.Article
+    // HOME
     object Article: Destination("article")
 
     object Bitcoin: Destination("bitcoin")
@@ -86,25 +87,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             News_FinalProjectTheme {
-                // A surface container using the 'background' color from the theme
+                // A surface container
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    //fetch logged in user
+                    // fetch logged in user from intents
                     val userID = intent.getStringExtra("userID")
 
-                    // context
+                    // grab the current context
                     var context: Context = LocalContext.current
 
-                    // db
+                    // initialize database
                     val db = AppDatabase.getInstance(context)
 
-                    // fetch news data from api
+                    // fetch news data from api based on managers
                     val newsManager: NewsManager = NewsManager(db)
                     val bitcoinManager: BitcoinManager = BitcoinManager(db)
                     val ethereumManager: EthereumManager = EthereumManager(db)
 
-                    // firestore
+                    // access firestore database
                     val fs_db = Firebase.firestore
 
                     // initialize view model
@@ -119,9 +120,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// Represents the basic structure for the App, TopHeader + whichever screen the user selects
 @Composable
 fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bitcoinManager: BitcoinManager, ethereumManager: EthereumManager, viewModel : NewsViewModel) {
     Scaffold(
+        // handles top header
         topBar = {
             TopHeader(navController = navController)
         }
@@ -130,8 +133,10 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
             modifier = Modifier.padding(paddingValues)
         ) {
 
-            //NavHost
+            // NavHost holds all composable functions for each screen
             NavHost(navController = navController, startDestination = Destination.Article.route) {
+
+                // this is the HOME screen
                 composable(Destination.Article.route) {
                     NewsScreen(newsManager, navController)
                 }

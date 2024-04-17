@@ -37,21 +37,20 @@ import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.BitcoinManager
 import com.example.news_finalproject.components.NewsCard
 
+// When a user clicks on "Bitcoin" they are redirected to this screen
 @Composable
 fun BitcoinScreen(bitcoinManager: BitcoinManager, navController: NavHostController) {
-    // logs
+
+    // get all Bitcoin articles using bitcoin manager
     val news = bitcoinManager.newsResponse.value
+
+    // logs
     Log.i("BitcoinScreen", "NewsResponse size: ${news.size}")
     Log.i("BitcoinScreen", "First article: ${news.firstOrNull()?.title}")
 
     for(article in news) {
         Log.i("title", "${article.title}")
     }
-
-    // icons
-    val ic_bitcoin = painterResource(id = R.drawable.ic_bitcoin)
-    val ic_ethereum = painterResource(id = R.drawable.ic_ethereum)
-    val ic_stocks = painterResource(id = R.drawable.ic_stocks)
 
     //Column
     Column(modifier = Modifier
@@ -124,6 +123,7 @@ fun BitcoinScreen(bitcoinManager: BitcoinManager, navController: NavHostControll
             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
         )
 
+        // column that holds all news articles
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             // Row for the last article image and title
             item {
@@ -166,6 +166,8 @@ fun BitcoinScreen(bitcoinManager: BitcoinManager, navController: NavHostControll
             }
 
             // list all article rows
+            // the items function iterates over each article in the news array
+            // for each article, create a new NewsCard, add the navController to allow navigation to individual news articles
             items(news) { article ->
                 NewsCard(newsItem = article, navController)
             }

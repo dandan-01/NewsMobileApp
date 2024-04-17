@@ -34,9 +34,12 @@ import androidx.navigation.NavController
 import com.example.news_finalproject.Destination
 import com.google.firebase.auth.FirebaseAuth
 
+// If a user clicks on the Register button, they should be redirected to this screen
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RegisterScreen(navController: NavController) {
+
+    // define variables
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -111,6 +114,7 @@ fun RegisterScreen(navController: NavController) {
     }
 }
 
+// If the password and confirm password text fields match, use the built in firebase method, createUserWithEmailAndPassword() to handle the register function
 @OptIn(ExperimentalComposeUiApi::class)
 private fun performRegistration(
     email: String,
