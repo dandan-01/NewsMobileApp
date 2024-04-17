@@ -138,42 +138,48 @@ fun NewsScreen(newsManager: NewsManager, navController: NavHostController) {
             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
         )
 
-        // Row for the last article image and title
-        Box(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-        ) {
-            // AsyncImage for the last article image
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(news.lastOrNull()?.urlToImage) // Use imageUrl from the last article in news
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth() // Set size of the image
-                    .height(200.dp) // Set the desired height of the image
-                    .clip(shape = RoundedCornerShape(4.dp)) // Apply rounded corners to the image
-            )
-
-            // Title of the last article
-            Text(
-                text = news.lastOrNull()?.title ?: "", // Get the title of the last article
-                color = Color.White,
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                maxLines = 2, // Limit title to 2 lines
-                overflow = TextOverflow.Ellipsis, // Add ellipsis if the title exceeds 2 lines
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 4.dp) // Add padding around the text
-                    .background(color = Color.Black.copy(alpha = 0.25f)) // Semi-transparent black background
-            )
-        }
-
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            // Row for the last article image and title
+            item {
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    // AsyncImage for the last article image
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(news.lastOrNull()?.urlToImage) // Use imageUrl from the last article in news
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth() // Set size of the image
+                            .height(200.dp) // Set the desired height of the image
+                            .clip(shape = RoundedCornerShape(4.dp)) // Apply rounded corners to the image
+                    )
+
+                    // Title of the last article
+                    Text(
+                        text = news.lastOrNull()?.title ?: "", // Get the title of the last article
+                        color = Color.White,
+                        style = TextStyle(
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        maxLines = 2, // Limit title to 2 lines
+                        overflow = TextOverflow.Ellipsis, // Add ellipsis if the title exceeds 2 lines
+                        modifier = Modifier
+                            .padding(
+                                horizontal = 8.dp,
+                                vertical = 4.dp
+                            ) // Add padding around the text
+                            .background(color = Color.Black.copy(alpha = 0.25f)) // Semi-transparent black background
+                    )
+                }
+            }
+
+            // list all article rows
             items(news) { article ->
                 NewsCard(newsItem = article, navController)
             }

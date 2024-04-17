@@ -51,6 +51,8 @@ import com.example.news_finalproject.api.BitcoinManager
 import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
+import com.example.news_finalproject.auth.AccountScreen
+import com.example.news_finalproject.auth.RegisterScreen
 import com.example.news_finalproject.auth.SignInScreen
 import com.example.news_finalproject.components.NavItem
 import com.example.news_finalproject.db.AppDatabase
@@ -74,8 +76,9 @@ sealed class Destination(val route: String){
 
     object Ethereum: Destination("ethereum")
 
-    object Account: Destination("account"){
-    }
+    object Account: Destination("account")
+
+    object Register: Destination("register")
 }
 
 class MainActivity : ComponentActivity() {
@@ -135,16 +138,20 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
 
                 composable(Destination.Bitcoin.route)
                 {
-                    //BitcoinScreen(bitcoinManager, navController)
+                    BitcoinScreen(bitcoinManager, navController)
                 }
 
                 composable(Destination.Ethereum.route)
                 {
-                    //EthereumScreen(ethereumManager, navController)
+                    EthereumScreen(ethereumManager, navController)
                 }
 
                 composable(Destination.Account.route) {
-                    SignInScreen(navController) //this is in auth.kt
+                    AccountScreen(navController) //this is in auth.kt
+                }
+
+                composable(Destination.Register.route) {
+                    RegisterScreen(navController) //this is in Register.kt
                 }
             }
         }
