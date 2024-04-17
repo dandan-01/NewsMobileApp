@@ -58,7 +58,7 @@ fun SideMenu(
         NavItem(
             title = "Account",
             icon = Icons.Filled.AccountCircle,
-            destination = Destination.Article.route
+            destination = Destination.Account.route
         ),
         NavItem(
             title = "Guide to Safe Investing",

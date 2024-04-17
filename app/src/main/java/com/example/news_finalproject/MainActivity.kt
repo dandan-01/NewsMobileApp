@@ -51,6 +51,7 @@ import com.example.news_finalproject.api.BitcoinManager
 import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
+import com.example.news_finalproject.auth.SignInScreen
 import com.example.news_finalproject.components.NavItem
 import com.example.news_finalproject.db.AppDatabase
 import com.example.news_finalproject.model.Article
@@ -73,7 +74,7 @@ sealed class Destination(val route: String){
 
     object Ethereum: Destination("ethereum")
 
-    object Search: Destination("search"){
+    object Account: Destination("account"){
     }
 }
 
@@ -142,8 +143,8 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
                     //EthereumScreen(ethereumManager, navController)
                 }
 
-                // TODO, to be honest, I don't I even need this route anymore. It's already being handled by my viewModel + TopHeader: LaunchedEffect. Will delete this once confirmed that it's no longer needed
-                composable(Destination.Search.route) {
+                composable(Destination.Account.route) {
+                    SignInScreen(navController) //this is in auth.kt
                 }
             }
         }
