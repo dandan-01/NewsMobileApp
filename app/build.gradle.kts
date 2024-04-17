@@ -54,6 +54,10 @@ android {
 
 dependencies {
 
+    // jsoup
+    implementation("org.jsoup:jsoup:1.14.3")
+
+
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))

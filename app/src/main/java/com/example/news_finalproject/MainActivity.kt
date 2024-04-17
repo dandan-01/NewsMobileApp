@@ -51,6 +51,7 @@ import com.example.news_finalproject.api.BitcoinManager
 import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
+import com.example.news_finalproject.api.jsoup.WebViewWithCss
 import com.example.news_finalproject.auth.AccountScreen
 import com.example.news_finalproject.auth.RegisterScreen
 import com.example.news_finalproject.auth.SignInScreen
@@ -80,6 +81,9 @@ sealed class Destination(val route: String){
     object Account: Destination("account")
 
     object Register: Destination("register")
+
+    // holds website content about Crypto Investing
+    object Jsoup: Destination("jsoup")
 }
 
 class MainActivity : ComponentActivity() {
@@ -157,6 +161,10 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
 
                 composable(Destination.Register.route) {
                     RegisterScreen(navController) //this is in Register.kt
+                }
+
+                composable(Destination.Jsoup.route) {
+                    WebViewWithCss() //this is in Register.kt
                 }
             }
         }

@@ -113,6 +113,11 @@ fun TopHeader(navController: NavController) {
     // log
     Log.d("TopHeader", "Number of articles in TopHeader: ${news.size}")
 
+    // icons
+    val ic_menu = painterResource(id = R.drawable.ic_menu)
+    val ic_account = painterResource(id = R.drawable.ic_account)
+    val ic_search = painterResource(id = R.drawable.ic_search)
+
     // menu drawerState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 

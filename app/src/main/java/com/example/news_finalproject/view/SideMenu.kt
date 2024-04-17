@@ -64,7 +64,7 @@ fun SideMenu(
         NavItem(
             title = "Guide to Safe Investing",
             icon = Icons.Filled.Info,
-            destination = Destination.Article.route
+            destination = Destination.Jsoup.route
         )
     )
 
