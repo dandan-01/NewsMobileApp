@@ -32,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,8 +70,10 @@ import com.example.news_finalproject.view.BitcoinScreen
 import com.example.news_finalproject.view.EthereumScreen
 import com.example.news_finalproject.view.NewsScreen
 import com.example.news_finalproject.view.TopHeader
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Represents different destinations and routes. The sealed modifier, means all subclasses must be declared in the same file as the sealed class itself. This makes it easier to manage and understand all possible destinations in one place.
 sealed class Destination(val route: String){
@@ -178,24 +181,28 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
                     WebViewWithCss() //this is in Register.kt
                 }
 
-                composable(Destination.NewsDetail.route) { navBackStackEntry ->
+                composable(Destination.NewsDetail.route + "/{url}") { navBackStackEntry ->
                     val url: String? = navBackStackEntry.arguments?.getString("url")
 
-                    Log.d("MainActivity", "URL: $url")
+                    // State to hold the retrieved news item
+                    var newsItemState by remember { mutableStateOf<Article?>(null) }
 
-                    GlobalScope.launch {
-                        if (url != null) {
-                            newsItem = db.newsDao().getNewsById(url.toString())
-                            Log.d("MainActivity", "Retrieved URL: $url")
+                    LaunchedEffect(url) {
+                        url?.let {
+                            val fetchedNewsItem = withContext(Dispatchers.IO) {
+                                db.newsDao().getNewsById(url)
+                            }
+                            // Update the state with the fetched news item
+                            newsItemState = fetchedNewsItem
                         }
                     }
 
-                    val newsItem: Article? = navController.currentBackStackEntry?.savedStateHandle?.get<Article>("newsItem")
-
-                    if (newsItem != null){
-                        NewsDetailCard(newsItem = newsItem) //remember to re-add fs_db
+                    // Display the NewsDetailCard if newsItemState is not null
+                    newsItemState?.let { newsItem ->
+                        NewsDetailCard(newsItem = newsItem)
                     }
                 }
+
             }
         }
     }
