@@ -46,66 +46,73 @@ fun NewsCard(
     newsItem: Article,
     navController: NavController
 ) {
-    Row(
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable {
-                val encodedUrl = Uri.encode(newsItem.url)
-                val destinationWithUrl = Destination.NewsDetail.route + "/$encodedUrl"
-                navController.navigate(route = destinationWithUrl)
+    // Define a state variable to track the selected news item
+    var selectedNewsItem by remember { mutableStateOf<Article?>(null) }
+
+    if (selectedNewsItem != null) {
+        NewsDetailCard(newsItem = selectedNewsItem!!)
+    } else {
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable {
+                    // Update the selected news item when clicked
+                    selectedNewsItem = newsItem
+                }
+                .fillMaxWidth()
+        ) {
+            // Image
+            Box(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(120.dp)
+                    .clip(
+                        RoundedCornerShape(8.dp)
+                    )
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(newsItem.urlToImage)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
             }
-            .fillMaxWidth()
-    ) {
-        // Image
-        Box(
-            modifier = Modifier
-                .width(120.dp)
-                .height(120.dp)
-                .clip(
-                    RoundedCornerShape(8.dp))
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(newsItem.urlToImage)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        }
 
-        // Spacer between image and text
-        Spacer(modifier = Modifier.width(8.dp))
+            // Spacer between image and text
+            Spacer(modifier = Modifier.width(8.dp))
 
-        // Column holding title and description
-        Column(
-            modifier = Modifier
-                .weight(1f) // Occupy remaining horizontal space
-                .padding(vertical = 8.dp)
-        ) {
-            // Title
-            Text(
-                text = newsItem.title ?: "",
-                maxLines = 2,
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(end = 12.dp)
-            )
+            // Column holding title and description
+            Column(
+                modifier = Modifier
+                    .weight(1f) // Occupy remaining horizontal space
+                    .padding(vertical = 8.dp)
+            ) {
+                // Title
+                Text(
+                    text = newsItem.title ?: "",
+                    maxLines = 2,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(end = 12.dp)
+                )
 
-            Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-            // Description
-            Text(
-                text = newsItem.description ?: "",
-                maxLines = 3,
-                style = TextStyle(
-                    fontSize = 15.sp
-                ),
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(end = 12.dp)
-            )
+                // Description
+                Text(
+                    text = newsItem.description ?: "",
+                    maxLines = 3,
+                    style = TextStyle(
+                        fontSize = 15.sp
+                    ),
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(end = 12.dp)
+                )
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun NewsDetailCard(
     newsItem: Article,
-    fs_db: FirebaseFirestore
+    //fs_db: FirebaseFirestore
 ) {
     // Layout for displaying news details
     Column(

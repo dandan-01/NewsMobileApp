@@ -193,7 +193,7 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
                     val newsItem: Article? = navController.currentBackStackEntry?.savedStateHandle?.get<Article>("newsItem")
 
                     if (newsItem != null){
-                        NewsDetailCard(newsItem = newsItem, fs_db)
+                        NewsDetailCard(newsItem = newsItem) //remember to re-add fs_db
                     }
                 }
             }
