@@ -2,6 +2,7 @@ package com.example.news_finalproject
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -56,8 +57,10 @@ import com.example.news_finalproject.auth.AccountScreen
 import com.example.news_finalproject.auth.RegisterScreen
 import com.example.news_finalproject.auth.SignInScreen
 import com.example.news_finalproject.components.NavItem
+import com.example.news_finalproject.components.NewsDetailCard
 import com.example.news_finalproject.db.AppDatabase
 import com.example.news_finalproject.model.Article
+import com.example.news_finalproject.model.News
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
@@ -66,6 +69,7 @@ import com.example.news_finalproject.view.BitcoinScreen
 import com.example.news_finalproject.view.EthereumScreen
 import com.example.news_finalproject.view.NewsScreen
 import com.example.news_finalproject.view.TopHeader
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 // Represents different destinations and routes. The sealed modifier, means all subclasses must be declared in the same file as the sealed class itself. This makes it easier to manage and understand all possible destinations in one place.
@@ -84,6 +88,9 @@ sealed class Destination(val route: String){
 
     // holds website content about Crypto Investing
     object Jsoup: Destination("jsoup")
+
+    // holds individual news articles
+    object NewsDetail: Destination("newsDetail")
 }
 
 class MainActivity : ComponentActivity() {
@@ -117,7 +124,7 @@ class MainActivity : ComponentActivity() {
 
                     // moviescaffold
                     val navController = rememberNavController()
-                    NewsScaffold(navController = navController, newsManager, bitcoinManager, ethereumManager, viewModel)
+                    NewsScaffold(navController = navController, newsManager, bitcoinManager, ethereumManager, viewModel, db, fs_db)
                 }
             }
         }
@@ -126,7 +133,11 @@ class MainActivity : ComponentActivity() {
 
 // Represents the basic structure for the App, TopHeader + whichever screen the user selects
 @Composable
-fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bitcoinManager: BitcoinManager, ethereumManager: EthereumManager, viewModel : NewsViewModel) {
+fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bitcoinManager: BitcoinManager, ethereumManager: EthereumManager, viewModel : NewsViewModel, db : AppDatabase, fs_db: FirebaseFirestore) {
+    var newsItem by remember {
+        mutableStateOf<Article?>(null)
+    }
+
     Scaffold(
         // handles top header
         topBar = {
@@ -165,6 +176,25 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
 
                 composable(Destination.Jsoup.route) {
                     WebViewWithCss() //this is in Register.kt
+                }
+
+                composable(Destination.NewsDetail.route) { navBackStackEntry ->
+                    val url: String? = navBackStackEntry.arguments?.getString("url")
+
+                    Log.d("MainActivity", "URL: $url")
+
+                    GlobalScope.launch {
+                        if (url != null) {
+                            newsItem = db.newsDao().getNewsById(url.toString())
+                            Log.d("MainActivity", "Retrieved URL: $url")
+                        }
+                    }
+
+                    val newsItem: Article? = navController.currentBackStackEntry?.savedStateHandle?.get<Article>("newsItem")
+
+                    if (newsItem != null){
+                        NewsDetailCard(newsItem = newsItem, fs_db)
+                    }
                 }
             }
         }

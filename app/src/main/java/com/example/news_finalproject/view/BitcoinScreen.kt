@@ -169,7 +169,9 @@ fun BitcoinScreen(bitcoinManager: BitcoinManager, navController: NavHostControll
             // the items function iterates over each article in the news array
             // for each article, create a new NewsCard, add the navController to allow navigation to individual news articles
             items(news) { article ->
-                NewsCard(newsItem = article, navController)
+                NewsCard(
+                    newsItem = article,
+                    navController = navController)
             }
         }
     }

@@ -1,5 +1,9 @@
 package com.example.news_finalproject.components
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.news_finalproject.Destination
 import com.example.news_finalproject.api.NewsViewModel
 import com.example.news_finalproject.model.Article
 
@@ -41,17 +46,15 @@ fun NewsCard(
     newsItem: Article,
     navController: NavController
 ) {
-    var isIconChanged by remember {mutableStateOf(false)}
-
     Row(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                // add the ability to go to detail page
-                navController.navigate("individualNewsArticle/${newsItem.url}")
+                val encodedUrl = Uri.encode(newsItem.url)
+                val destinationWithUrl = Destination.NewsDetail.route + "/$encodedUrl"
+                navController.navigate(route = destinationWithUrl)
             }
             .fillMaxWidth()
-//            .border(1.dp, Color.Gray, shape = RectangleShape)
     ) {
         // Image
         Box(
@@ -73,7 +76,7 @@ fun NewsCard(
         // Spacer between image and text
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Title and Description
+        // Column holding title and description
         Column(
             modifier = Modifier
                 .weight(1f) // Occupy remaining horizontal space

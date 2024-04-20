@@ -31,8 +31,8 @@ fun WebViewWithCss() {
         factory = { context ->
             WebView(context).apply {
                 settings.javaScriptEnabled = true
-                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Example setting
-                webViewClient = WebViewClient() // Assuming you've defined WebViewClient
+                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // loads the resource from the network
+                webViewClient = WebViewClient() // responsible for handling page navigation events, such as when the user clicks on a link
             }
         }
     ) { webView ->
@@ -43,6 +43,11 @@ fun WebViewWithCss() {
 
                 // Fetch HTML content from the webpage using GET
                 val document = Jsoup.connect(url).get()
+
+                // Remove top header from HTML content
+                // in this case it's enclosed in a <div> tag
+                document.select("div.SiteNav-wrapper").remove()
+
 
                 // Find all <link rel="stylesheet"> elements to fetch CSS
                 val cssLinks = document.select("link[rel=stylesheet]")
