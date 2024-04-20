@@ -3,13 +3,21 @@ package com.example.news_finalproject.components
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +48,22 @@ fun NewsDetailCard(
 ) {
     // context
     val context = LocalContext.current
+
+    // icon is bookmarked?
+    var isBookmarked by remember { mutableStateOf(false) }
+
+    // firestore database
+    val db = FirebaseFirestore.getInstance()
+
+    // Check if article is already bookmarked when Card is displayed
+    LaunchedEffect(newsItem) {
+        db.collection("saved_articles")
+            .whereEqualTo("url", newsItem.url)
+            .get()
+            .addOnSuccessListener { documents ->
+                isBookmarked = !documents.isEmpty
+            }
+    }
 
     // Layout for displaying news details
     Column(
@@ -130,19 +154,27 @@ fun NewsDetailCard(
             }
         )
 
-        Spacer(modifier = Modifier.weight(1f)) // This pushes the button to the bottom
+        Spacer(modifier = Modifier.weight(1f)) // push the button to the bottom
 
-        // Add FloatingActionButton for bookmarking
-        FloatingActionButton(
+        // button to ADD to firestore database (collection: saved_articles)
+        IconButton(
             onClick = {
-                saveArticleToFirestore(newsItem, context)
+                if (isBookmarked) {
+                    removeArticleFromFirestore(newsItem, context)
+                } else {
+                    saveArticleToFirestore(newsItem, context)
+                }
+                isBookmarked = !isBookmarked
             },
             modifier = Modifier
-                .align(Alignment.CenterHorizontally) // Centering the FAB horizontally
+                .padding(8.dp)
+                .background(color = Color(0xFFD9DFEC))
         ) {
             Icon(
-                painter = painterResource(id = com.example.news_finalproject.R.drawable.ic_bookmark),
-                contentDescription = ""
+                painter = painterResource(
+                    id = if (isBookmarked) com.example.news_finalproject.R.drawable.ic_remove_bookmark else com.example.news_finalproject.R.drawable.ic_add_bookmark
+                ),
+                contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark"
             )
         }
     }
@@ -168,5 +200,23 @@ fun saveArticleToFirestore(newsItem: Article, context: android.content.Context) 
         .addOnFailureListener { e ->
             // Failure handling, maybe show a toast
             Toast.makeText(context, "Failed to save article.", Toast.LENGTH_SHORT).show()
+        }
+}
+
+fun removeArticleFromFirestore(newsItem: Article, context: android.content.Context) {
+    val db = FirebaseFirestore.getInstance()
+
+    // Query to find the document to delete
+    db.collection("saved_articles")
+        .whereEqualTo("url", newsItem.url)
+        .get()
+        .addOnSuccessListener { documents ->
+            for (document in documents) {
+                db.collection("saved_articles").document(document.id).delete()
+            }
+            Toast.makeText(context, "Article removed successfully!", Toast.LENGTH_SHORT).show()
+        }
+        .addOnFailureListener {
+            Toast.makeText(context, "Failed to remove article.", Toast.LENGTH_SHORT).show()
         }
 }
