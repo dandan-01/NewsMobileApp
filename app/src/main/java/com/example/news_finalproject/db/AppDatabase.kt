@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.news_finalproject.model.Article
 import com.example.news_finalproject.utility.Converters
 
+// this creates the Room Database that holds my tbl_news
 @Database(entities=[Article::class], version=3, exportSchema=false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {

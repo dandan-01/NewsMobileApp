@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+// This Manager handles the newsResponse for the Home screen (when a user clicks on Trending Now in one of the main screens)
 class NewsManager(database: AppDatabase) {
 
     private var _newsResponse = mutableStateOf<List<Article>>(emptyList())

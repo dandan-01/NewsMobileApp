@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+// This Manager handles the newsResponse for EthereumScreen (when a user clicks on Ethereum in one of the main screens)
 class EthereumManager(database: AppDatabase) {
 
     private var _newsResponse = mutableStateOf<List<Article>>(emptyList())

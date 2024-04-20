@@ -1,6 +1,7 @@
 package com.example.news_finalproject
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -53,6 +54,7 @@ import com.example.news_finalproject.api.BitcoinManager
 import com.example.news_finalproject.api.EthereumManager
 import com.example.news_finalproject.api.NewsManager
 import com.example.news_finalproject.api.NewsViewModel
+import com.example.news_finalproject.api.jsoup.JsoupArticleUrl
 import com.example.news_finalproject.api.jsoup.WebViewWithCss
 import com.example.news_finalproject.auth.AccountScreen
 import com.example.news_finalproject.auth.RegisterScreen
@@ -90,7 +92,10 @@ sealed class Destination(val route: String){
     object Register: Destination("register")
 
     // holds website content about Crypto Investing
-    object Jsoup: Destination("jsoup")
+    object JsoupGuide: Destination("jsoup")
+
+    // holds website content about Article Url
+    object JsoupUrl: Destination("jsoupUrl/{url}")
 
     // holds individual news articles
     object NewsDetail: Destination("newsDetail")
@@ -177,10 +182,20 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
                     RegisterScreen(navController) //this is in Register.kt
                 }
 
-                composable(Destination.Jsoup.route) {
-                    WebViewWithCss() //this is in Register.kt
+                // jsoup guide
+                composable(Destination.JsoupGuide.route) {
+                    WebViewWithCss()
                 }
 
+                // jsoup article url
+                composable(Destination.JsoupUrl.route + "/{url}") { navBackStackEntry ->
+                    val url = Uri.decode(navBackStackEntry.arguments?.getString("url") ?: "")
+                    JsoupArticleUrl(url = url, navController)
+                }
+
+                // Initially, I launched coroutines directly using GlobalScope.launch.
+                // The problem was that I needed to use LaunchedEffect inside the composable function to perform asynchronous operations instead.
+                // I also needed to use mutableStateOf to manage UI state and trigger recomposition when state changes occur
                 composable(Destination.NewsDetail.route + "/{url}") { navBackStackEntry ->
                     val url: String? = navBackStackEntry.arguments?.getString("url")
 
@@ -199,10 +214,9 @@ fun NewsScaffold(navController: NavHostController, newsManager: NewsManager, bit
 
                     // Display the NewsDetailCard if newsItemState is not null
                     newsItemState?.let { newsItem ->
-                        NewsDetailCard(newsItem = newsItem)
+                        NewsDetailCard(newsItem = newsItem, navController)
                     }
                 }
-
             }
         }
     }

@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+// this NewsService is what obtains the queries using the NewsAPI
 interface NewsService {
 
     // always call parent News data and NOT Article

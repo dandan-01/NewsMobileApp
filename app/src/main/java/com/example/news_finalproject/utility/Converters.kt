@@ -5,6 +5,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 
+// Converters are used to convert JSON file into a list of integers and vice versa
 class Converters {
     private val moshi: Moshi = Moshi.Builder().build()
 

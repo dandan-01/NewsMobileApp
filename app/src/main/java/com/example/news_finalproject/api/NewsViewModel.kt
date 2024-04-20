@@ -20,6 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+// this ViewModel obtains the results for the search function when a user clicks on the search icon on the top nav
 class NewsViewModel : ViewModel() {
     // MutableState for holding current state of news
     val news = mutableStateOf<List<Article>>(emptyList())

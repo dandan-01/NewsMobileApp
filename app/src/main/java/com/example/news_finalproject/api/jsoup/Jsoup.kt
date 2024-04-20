@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 
+// This represents the Jsoup function that obtains the webpage for when the user clicks on the Guide in the TopHeader
 @Composable
 fun WebViewWithCss() {
     AndroidView(

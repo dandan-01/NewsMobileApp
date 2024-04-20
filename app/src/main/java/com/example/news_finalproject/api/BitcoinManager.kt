@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+// This Manager handles the newsResponse for BitcoinScreen (when a user clicks on Bitccoin in one of the main screens)
 class BitcoinManager(database: AppDatabase) {
 
     private var _newsResponse = mutableStateOf<List<Article>>(emptyList())
